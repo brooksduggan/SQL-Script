@@ -1,0 +1,65 @@
+--5-1
+--CREATE OR REPLACE PROCEDURE prod_name_sp
+--    (p_prodid IN bb_product.idproduct%TYPE,
+--    p_desc IN bb_product.description%TYPE)
+--    IS
+--BEGIN
+--    UPDATE bb_product
+--        SET DESCRIPTION = p_desc
+--        WHERE idproduct = p_prodid;
+--    COMMIT;
+--END;
+--SELECT * FROM bb_product;
+--BEGIN
+--    prod_name_sp(1, 'CapressoBar Model #388');
+--END;
+--5-2
+--CREATE OR REPLACE PROCEDURE prod_add_sp
+--    (p_prodname IN bb_product.productname%TYPE,
+--    p_desc IN bb_product.description%TYPE,
+--    p_img IN BB_PRODUCT.PRODUCTIMAGE%TYPE,
+--    p_price IN BB_PRODUCT.price%TYPE,
+--    p_active IN BB_PRODUCT.ACTIVE%TYPE)
+--    IS
+--BEGIN
+--    INSERT INTO BB_PRODUCT(idproduct, productname, description, productimage, price, active) values (bb_prodid_seq.nextval, p_prodname, p_desc, p_img, p_price, p_active);
+--    COMMIT;
+--END;
+--BEGIN
+--    PROD_ADD_SP('Roasted Blend', 'Well balanced mix of roasted beans, a medium body', 'roasted.jpg', 9.50, 1);
+--END;
+--5-3
+--CREATE OR REPLACE PROCEDURE tax_cost_sp
+--    (b_state IN bb_basket.shipstate%TYPE,
+--    b_subtot IN bb_basket.subtotal%TYPE,
+--    b_tax OUT bb_tax.taxrate%TYPE)
+--    IS
+--BEGIN
+--    SELECT (taxrate*b_subtot) INTO b_tax from bb_tax where b_state = state;
+--    COMMIT;
+--END;
+--DECLARE
+--    lv_tax NUMBER(3,2);
+--BEGIN
+--    tax_cost_sp('VA', 100, lv_tax);
+--    DBMS_OUTPUT.PUT_LINE(lv_tax);
+--END;
+--5-4
+--CREATE OR REPLACE PROCEDURE basket_confirm_sp
+--    (p_id    in bb_basket.idbasket%type,
+--   p_sub   in bb_basket.subtotal%type,
+--   p_ship  in bb_basket.shipping%type,
+--   p_tax   in bb_basket.tax%type,
+--   p_total in bb_basket.total%type)
+--    IS
+--BEGIN
+--      update bb_basket set orderplaced = 1, subtotal = p_sub, shipping = p_ship, tax = p_tax, total = p_total where idbasket = p_id;
+--    COMMIT;
+--END;
+--BEGIN
+--insert into bb_basket (idbasket, quantity, idshopper, orderplaced, subtotal, total, shipping, tax, dtcreated, promo) values (17, 2, 22, 0, 0, 0, 0, 0, '28-FEB-12', 0);
+--insert into bb_basketitem (idbasketitem, idproduct, price, quantity, idbasket, option1, option2) values (44, 7, 10.8, 3, 17, 2, 3);
+--insert into bb_basketitem (idbasketitem, idproduct, price, quantity, idbasket, option1, option2) values (45, 8, 10.8, 3, 17, 2, 3);
+--COMMIT;
+--END;
+--select subtotal, shipping, tax, total, orderplaced from bb_basket where idbasket = 17;
