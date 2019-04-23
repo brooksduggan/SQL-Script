@@ -1,0 +1,215 @@
+--7-1
+--CREATE OR REPLACE PACKAGE order_info_pkg IS
+--FUNCTION ship_name_pf
+--(p_basket IN NUMBER)
+--RETURN VARCHAR2;
+--PROCEDURE basket_info_pp
+--(p_basket IN NUMBER,
+--p_shop OUT NUMBER,
+--p_date OUT DATE);
+--END;
+--/
+--CREATE OR REPLACE PACKAGE BODY order_info_pkg IS
+-- FUNCTION ship_name_pf  
+--   (p_basket IN NUMBER)
+--   RETURN VARCHAR2
+--  IS
+--   lv_name_txt VARCHAR2(25);
+-- BEGIN
+--  SELECT shipfirstname||' '||shiplastname
+--   INTO lv_name_txt
+--   FROM bb_basket
+--   WHERE idBasket = p_basket;
+--  RETURN lv_name_txt;
+-- EXCEPTION
+--   WHEN NO_DATA_FOUND THEN
+--     DBMS_OUTPUT.PUT_LINE('Invalid basket id');
+-- END ship_name_pf;
+-- PROCEDURE basket_info_pp
+--  (p_basket IN NUMBER,
+--   p_shop OUT NUMBER,
+--   p_date OUT DATE)
+--  IS
+-- BEGIN
+--   SELECT idshopper, dtordered
+--    INTO p_shop, p_date
+--    FROM bb_basket
+--    WHERE idbasket = p_basket;
+-- EXCEPTION
+--   WHEN NO_DATA_FOUND THEN
+--     DBMS_OUTPUT.PUT_LINE('Invalid basket id');
+-- END basket_info_pp;
+--END;
+--7-2
+--CREATE OR REPLACE PACKAGE order_info_pkg IS
+-- FUNCTION ship_name_pf  
+--   (p_basket IN NUMBER)
+--   RETURN VARCHAR2;
+-- PROCEDURE basket_info_pp
+--  (p_basket IN NUMBER,
+--   p_shop OUT NUMBER,
+--   p_date OUT DATE);
+--END;
+--/
+--
+--CREATE OR REPLACE PACKAGE BODY order_info_pkg IS
+-- FUNCTION ship_name_pf  
+--   (p_basket IN NUMBER)
+--   RETURN VARCHAR2
+--  IS
+--   lv_name_txt VARCHAR2(25);
+-- BEGIN
+--  SELECT shipfirstname||' '||shiplastname
+--   INTO lv_name_txt
+--   FROM bb_basket
+--   WHERE idBasket = p_basket;
+--  RETURN lv_name_txt;
+-- EXCEPTION
+--   WHEN NO_DATA_FOUND THEN
+--     DBMS_OUTPUT.PUT_LINE('Invalid basket id');
+-- END ship_name_pf;
+-- PROCEDURE basket_info_pp
+--  (p_basket IN NUMBER,
+--   p_shop OUT NUMBER,
+--   p_date OUT DATE)
+--  IS
+-- BEGIN
+--   SELECT idshopper, dtordered
+--    INTO p_shop, p_date
+--    FROM bb_basket
+--    WHERE idbasket = p_basket;
+-- EXCEPTION
+--   WHEN NO_DATA_FOUND THEN
+--     DBMS_OUTPUT.PUT_LINE('Invalid basket id');
+-- END basket_info_pp;
+--END;
+--/
+--DECLARE
+--  lv_id NUMBER := 6;
+--  lv_name VARCHAR2(20);
+--  lv_shopper bb_basket.idshopper%TYPE;
+--  lv_date bb_basket.dtcreated%TYPE;
+--  
+--BEGIN
+--  lv_name := order_info_pkg.ship_name_pf(lv_id);
+--  DBMS_OUTPUT.PUT_LINE(lv_id||' '||lv_name);
+--
+--  order_info_pkg.basket_info_pp(lv_id, lv_shopper, lv_date);
+--  DBMS_OUTPUT.PUT_LINE(lv_id||' '||lv_shopper||' '||lv_date);
+--
+--END;
+--/
+--SELECT lpad(order_info_pkg.ship_name_pf(idbasket), 20)
+--            FROM bb_basket
+--                WHERE idbasket = 6;
+--7-3
+--CREATE OR REPLACE PACKAGE order_info_pkg IS
+-- PROCEDURE basket_info_pp
+--  (p_basket IN NUMBER,
+--   p_shopper OUT NUMBER,
+--   p_dated OUT DATE,
+--   p_shipment OUT VARCHAR);
+--END;
+--/
+--
+--CREATE OR REPLACE PACKAGE BODY order_info_pkg IS
+-- FUNCTION ship_name_pf  
+--   (p_basket IN NUMBER)
+--   RETURN VARCHAR2
+--  IS
+--   lv_name_txt VARCHAR2(25);
+-- BEGIN
+--  SELECT shipfirstname||' '||shiplastname
+--   INTO lv_name_txt
+--   FROM bb_basket
+--   WHERE idBasket = p_basket;
+--  RETURN lv_name_txt;
+-- EXCEPTION
+--   WHEN NO_DATA_FOUND THEN
+--     DBMS_OUTPUT.PUT_LINE('Invalid basket id');
+-- END ship_name_pf;
+-- PROCEDURE basket_info_pp
+--  (p_basket IN NUMBER,
+--   p_shopper OUT NUMBER,
+--   p_dated OUT DATE,
+--   p_shipment OUT VARCHAR)
+--  IS
+-- BEGIN
+--   SELECT idshopper, dtordered
+--    INTO p_shopper, p_dated
+--    FROM bb_basket
+--    WHERE idbasket = p_basket;
+--   p_shipment := ship_name_pf(p_basket);
+-- EXCEPTION
+--   WHEN NO_DATA_FOUND THEN
+--     DBMS_OUTPUT.PUT_LINE('Invalid basket id');
+-- END basket_info_pp;
+--END;
+--/
+--DECLARE
+--  lv_id NUMBER := 6;
+--  lv_name VARCHAR2(25);
+--  lv_shopper bb_basket.idshopper%TYPE;
+--  lv_date bb_basket.dtcreated%TYPE;
+--BEGIN
+--  order_info_pkg.basket_info_pp(lv_id, lv_shopper, lv_date, lv_name);
+--  DBMS_OUTPUT.PUT_LINE(lv_id||' '||lv_shopper||' '||lv_date||' '||lv_name);
+--END;
+--7-4
+--CREATE OR REPLACE FUNCTION verify_user
+--  (usernm IN VARCHAR2,
+--   passwd IN VARCHAR2)
+--   RETURN CHAR
+--  IS
+--   temp_user bb_shopper.username%TYPE;
+--   confirm CHAR(1) := 'N';
+--
+--BEGIN
+--  SELECT username
+--    INTO temp_user
+--        FROM bb_shopper
+--            WHERE password  = passwd;
+--  confirm := 'Y';
+--  RETURN confirm;
+--
+--EXCEPTION
+--  WHEN NO_DATA_FOUND THEN
+--     DBMS_OUTPUT.PUT_LINE('logon values are invalid');
+--END;
+--VARIABLE testing char(1);
+--
+--BEGIN
+--  :testing := verify_user('gma1', 'goofy');
+--END;
+--CREATE OR REPLACE PACKAGE login_pkg IS
+--  FUNCTION verify_user
+--  (uname IN VARCHAR2,
+--   pword IN VARCHAR2)
+--   RETURN CHAR;
+--END;
+--/
+--CREATE OR REPLACE PACKAGE BODY login_pkg IS
+--  FUNCTION verify_user
+--    (uname IN VARCHAR2,
+--     pword IN VARCHAR2)
+--     RETURN CHAR
+--    IS
+--     temp_user bb_shopper.username%TYPE;
+--     confirm CHAR(1) := 'N';
+--  BEGIN
+--    SELECT uname
+--      INTO temp_user
+--        FROM bb_shopper
+--            WHERE password = pword;
+--    confirm := 'Y';
+--    RETURN confirm;
+--  EXCEPTION
+--  WHEN NO_DATA_FOUND THEN
+--     DBMS_OUTPUT.PUT_LINE('logon values are invalid'); 
+--  END verify_user;
+--END;
+VARIABLE testing2 char(1);
+BEGIN
+  :testing2 := login_pkg.verify_user('gma1', 'goofy');
+  DBMS_OUTPUT.PUT_LINE(:testing2); 
+END;
