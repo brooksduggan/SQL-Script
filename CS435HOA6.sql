@@ -1,0 +1,64 @@
+--create or replace function dollar_fmt_sf
+--    (p_num NUMBER)
+--     return VARCHAR2
+--IS
+--    lv_amt_txt VARCHAR2(20);
+--BEGIN
+--    lv_amt_txt := to_char(p_num, '$99,999.99');
+--    return lv_amt_txt;
+--END;
+--6-1.2
+--DECLARE
+--    lv_amt_num NUMBER(8,2) := 9999.55;
+--BEGIN
+--    DBMS_OUTPUT.PUT_LINE(dollar_fmt_sf(lv_amt_num));
+--END;
+--6-1.3
+--SELECT dollar_fmt_sf(shipping), dollar_fmt_sf(total)
+--    FROM bb_basket
+--    WHERE idBasket = 3;
+--6-2.1
+--CREATE OR REPLACE FUNCTION TOT_PURCH_SF(id IN NUMBER) 
+--    RETURN NUMBER 
+--    IS 
+--    total NUMBER; 
+--BEGIN 
+--SELECT SUM(total) 
+--    INTO total 
+--        FROM BB_BASKET 
+--            WHERE idshopper=id;
+--RETURN total; 
+--END;
+--6-2.2
+--BEGIN
+--    DBMS_OUTPUT.PUT_LINE(tot_purch_sf(21));
+--END;
+--6-3.1
+--create or replace function num_purch_sf 
+--   (p_shopper_ID in number)
+-- return number
+-- is
+--   lv_count number(10);
+--BEGIN
+--   select count(IDBASKET)
+--     into lv_count
+--       from bb_basket
+--        where orderplaced = 1;
+--    return lv_count;
+--END;
+--6-3.2
+--select NUM_PURCH_SF(23)
+--  from bb_shopper
+--     where idshopper=23;
+--6-4.1
+--CREATE OR REPLACE FUNCTION DAY_ORD_SF (dtcreate date) 
+--    RETURN VARCHAR2 
+--        IS 
+--BEGIN 
+--RETURN TO_CHAR(dtcreate,'DAY'); 
+--END;
+--6-4.2
+SELECT DAY_ORD_SF(dtcreated) as "Number of Orders"
+FROM BB_BASKET
+GROUP BY DAY_ORD_SF(dtcreated)
+ORDER BY DAY_ORD_SF(dtcreated) DESC;
